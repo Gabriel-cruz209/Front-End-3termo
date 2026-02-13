@@ -2,96 +2,229 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Diferença Flex vs Grid</title>
+    <title>Museu do Display CSS</title>
     <style>
-        /* Estilos Gerais para visualização */
-        body { font-family: sans-serif; padding: 20px; background-color: #f0f0f0; }
-        h2 { color: #333; border-bottom: 2px solid #333; padding-bottom: 10px; margin-top: 40px;}
-        .box { color: white; padding: 20px; font-weight: bold; font-size: 1.2rem; text-align: center; border-radius: 8px;}
-        
-        /* -----------------------------------------------------------
-           EXEMPLO 1: FLEXBOX (Unidimensional - Linha)
-           ----------------------------------------------------------- */
-        .flex-container {
-            display: flex;             /* Ativa o Flexbox */
-            justify-content: space-between; /* Espalha os itens nas pontas */
-            align-items: center;       /* Centraliza verticalmente */
-            
-            background-color: #fff;
-            padding: 15px;
-            border: 2px dashed #2196F3; /* Azul */
+        /* RESET E ESTILOS GERAIS */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            padding: 20px; 
+            background-color: #f4f4f9; 
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
         }
+        h1 { text-align: center; color: #2c3e50; }
+        h2 { border-bottom: 2px solid #ddd; padding-bottom: 10px; margin-top: 50px; color: #444; }
+        p { color: #666; margin-bottom: 15px; }
+        code { background: #eee; padding: 2px 5px; border-radius: 4px; font-family: monospace; color: #d63031; }
 
-        .flex-item {
-            background-color: #2196F3;
-            padding: 10px 20px;
+        /* ESTILO PADRÃO DAS CAIXINHAS PARA VISUALIZAÇÃO */
+        .box {
+            padding: 15px;
             margin: 5px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 4px;
         }
 
-        /* -----------------------------------------------------------
-           EXEMPLO 2: GRID (Bidimensional - Linhas e Colunas)
-           ----------------------------------------------------------- */
-        .grid-container {
-            display: grid;             /* Ativa o Grid */
+        /* =========================================
+           1. DISPLAY: BLOCK (O Padrão de Divs)
+           ========================================= */
+        .container-block {
+            border: 2px dashed #95a5a6;
+            padding: 10px;
+        }
+        .item-block {
+            display: block; /* <--- O Padrão */
+            background-color: #e74c3c; /* Vermelho */
+            width: 50%; /* Block aceita largura */
+        }
+
+        /* =========================================
+           2. DISPLAY: INLINE (O Padrão de Textos)
+           ========================================= */
+        .container-inline {
+            border: 2px dashed #95a5a6;
+            padding: 10px;
+        }
+        .item-inline {
+            display: inline; /* <--- O Comportamento de texto */
+            background-color: #3498db; /* Azul */
             
-            /* Define 3 colunas de tamanhos iguais */
-            grid-template-columns: 1fr 1fr 1fr; 
-            /* Define que as linhas terão 100px de altura mínima */
-            grid-auto-rows: 100px; 
-            
-            gap: 15px; /* Espaço entre as células */
-            
+            /* NOTA: Width e Height e Margin-Top/Bottom NÃO funcionam em inline! */
+            width: 500px;  /* Ignorado */
+            height: 500px; /* Ignorado */
+            margin-top: 50px; /* Ignorado */
+        }
+
+        /* =========================================
+           3. DISPLAY: INLINE-BLOCK (O Híbrido)
+           ========================================= */
+        .container-inline-block {
+            border: 2px dashed #95a5a6;
+            padding: 10px;
+        }
+        .item-inline-block {
+            display: inline-block; /* <--- Flui como texto, mas tem corpo de bloco */
+            background-color: #9b59b6; /* Roxo */
+            width: 150px; /* Funciona! */
+            height: 60px; /* Funciona! */
+        }
+
+        /* =========================================
+           4. DISPLAY: FLEX (Layout Unidimensional)
+           ========================================= */
+        .container-flex {
+            display: flex; /* <--- Ativa o Flexbox */
+            justify-content: space-between; /* Espalha */
+            align-items: center; /* Alinha no centro vertical */
+            height: 100px;
             background-color: #fff;
-            padding: 15px;
-            border: 2px dashed #E91E63; /* Rosa */
+            border: 2px solid #2ecc71; /* Verde */
+            padding: 10px;
+        }
+        .item-flex {
+            background-color: #27ae60;
+            padding: 10px;
+            color: white;
         }
 
-        .grid-item {
-            background-color: #E91E63;
+        /* =========================================
+           5. DISPLAY: GRID (Layout Bidimensional)
+           ========================================= */
+        .container-grid {
+            display: grid; /* <--- Ativa o Grid */
+            grid-template-columns: 1fr 2fr 1fr; /* 3 Colunas Assimétricas */
+            grid-template-rows: 50px 50px;      /* 2 Linhas */
+            gap: 10px;
+            background-color: #fff;
+            border: 2px solid #e67e22; /* Laranja */
+            padding: 10px;
+        }
+        .item-grid {
+            background-color: #d35400;
+            display: flex; align-items: center; justify-content: center; /* Centralizar texto */
+        }
+        .grid-span {
+            grid-column: span 3; /* Ocupa a largura toda da segunda linha */
+            background-color: #e67e22;
+        }
+
+        /* =========================================
+           6. DISPLAY: NONE (O Desaparecido)
+           ========================================= */
+        .container-none {
+            border: 2px dashed #95a5a6;
+            padding: 10px;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            gap: 10px;
+        }
+        .item-visible {
+            background-color: #34495e;
+            padding: 10px; color: white;
+        }
+        .item-none {
+            display: none; /* <--- REMOVIDO DA EXISTÊNCIA */
+        }
+        /* Apenas para comparação: Visibility Hidden (Oculto mas ocupa espaço) */
+        .item-hidden {
+            visibility: hidden; 
+            background-color: red; padding: 10px;
         }
 
-        /* A MÁGICA DO GRID: Controlando espaço 2D */
-        
-        /* O Item 1 vai ocupar 2 colunas */
-        .item-grande-horizontal {
-            grid-column: span 2; 
-            background-color: #C2185B;
+        /* =========================================
+           7. DISPLAY: CONTENTS (O Fantasma)
+           ========================================= */
+        .container-contents-pai {
+            display: flex; /* O Pai é Flex */
+            gap: 20px;
+            border: 2px solid #f1c40f; /* Amarelo */
+            padding: 20px;
+            background: #fff;
         }
-
-        /* O Item 3 vai ocupar 2 linhas (altura) */
-        .item-grande-vertical {
-            grid-row: span 2;
-            background-color: #880E4F;
+        .wrapper-fantasma {
+            display: contents; /* <--- Essa div deixa de existir visualmente */
+            border: 10px solid red; /* ISSO NÃO VAI APARECER */
+            background: red;        /* ISSO NÃO VAI APARECER */
+        }
+        .item-neto {
+            background-color: #f39c12;
+            padding: 20px;
+            border: 2px solid black;
         }
 
     </style>
 </head>
 <body>
 
-    <h2>1. Flexbox: O Fluxo (1D)</h2>
-    <p>Perceba como os itens se alinham em uma única linha. O foco é distribuir o espaço entre eles.</p>
-    
-    <div class="flex-container">
-        <div class="flex-item">Logo</div>
-        <div class="flex-item">Sobre</div>
-        <div class="flex-item">Serviços</div>
-        <div class="flex-item">Contato</div>
+    <h1>Guia Visual: Propriedade Display</h1>
+    <p style="text-align: center;">Role para baixo para entender como cada tipo se comporta.</p>
+
+    <h2>1. Display: Block (Bloco)</h2>
+    <p>O padrão de <code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;h1&gt;</code>. Eles ocupam 100% da largura disponível e sempre começam numa nova linha.</p>
+    <div class="container-block">
+        <div class="box item-block">Eu sou um Bloco (50% width)</div>
+        <div class="box item-block">Eu quebro a linha automaticamente</div>
     </div>
 
-    <h2>2. Grid: O Tabuleiro (2D)</h2>
-    <p>Perceba como manipulamos largura e altura ao mesmo tempo. O item 1 estica para o lado, o item 3 estica para baixo.</p>
-
-    <div class="grid-container">
-        <div class="grid-item item-grande-horizontal">1 (Largo)</div>
-        <div class="grid-item">2</div>
-        <div class="grid-item item-grande-vertical">3 (Alto)</div>
-        <div class="grid-item">4</div>
-        <div class="grid-item">5</div>
-        <div class="grid-item">6</div>
+    <h2>2. Display: Inline (Linha)</h2>
+    <p>O padrão de <code>&lt;span&gt;</code>, <code>&lt;a&gt;</code>. Eles fluem junto com o texto. <br><strong>Importante:</strong> Eles ignoram altura, largura e margens verticais.</p>
+    <div class="container-inline">
+        Texto normal...
+        <div class="box item-inline">SOU INLINE</div>
+        <div class="box item-inline">IGNORO WIDTH/HEIGHT</div>
+        ...texto continua.
     </div>
 
+    <h2>3. Display: Inline-Block</h2>
+    <p>O melhor dos dois mundos antigos. Eles ficam lado a lado (como inline) mas respeitam altura e largura (como block).</p>
+    <div class="container-inline-block">
+        <div class="box item-inline-block">Box 1</div>
+        <div class="box item-inline-block">Box 2</div>
+        <div class="box item-inline-block">Box 3</div>
+    </div>
+
+    <h2>4. Display: Flex (Layout Moderno 1D)</h2>
+    <p>O pai vira um controlador flexível. Ótimo para alinhamentos e distribuições em uma direção.</p>
+    <div class="container-flex">
+        <div class="item-flex">Item 1</div>
+        <div class="item-flex">Item 2</div>
+        <div class="item-flex">Item 3</div>
+    </div>
+
+    <h2>5. Display: Grid (Layout Moderno 2D)</h2>
+    <p>O pai desenha uma tabela. Ótimo para estruturas complexas de linhas e colunas.</p>
+    <div class="container-grid">
+        <div class="box item-grid">A</div>
+        <div class="box item-grid">B</div>
+        <div class="box item-grid">C</div>
+        <div class="box item-grid grid-span">D (Ocupa 3 colunas)</div>
+    </div>
+
+    <h2>6. Display: None vs Visibility: Hidden</h2>
+    <p><code>None</code> remove o elemento do fluxo (o item 2 sumiu e o 3 ocupou o lugar). <br><code>Hidden</code> deixa o elemento invisível, mas o espaço dele continua lá (buraco vazio).</p>
+    <div class="container-none">
+        <div class="item-visible">Item 1</div>
+        <div class="item-none">Item 2 (display: none)</div>
+        <div class="item-visible">Item 3</div>
+        <div class="item-hidden">Item 4 (visibility: hidden)</div>
+        <div class="item-visible">Item 5</div>
+    </div>
+
+    <h2>7. Display: Contents (O Fantasma)</h2>
+    <p>A borda amarela é o Flex Pai. A caixa vermelha (wrapper) tem <code>display: contents</code>, então ela desaparece. Os filhos dela (laranjas) agem como se fossem filhos diretos do amarelo.</p>
+    <div class="container-contents-pai">
+        <div class="item-neto">Filho direto</div>
+        
+        <div class="wrapper-fantasma">
+            <div class="item-neto">Neto promovido 1</div>
+            <div class="item-neto">Neto promovido 2</div>
+        </div>
+        
+        <div class="item-neto">Filho direto</div>
+    </div>
+
+    <br><br><br>
 </body>
 </html>
