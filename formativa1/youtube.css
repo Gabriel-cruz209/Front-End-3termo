@@ -1,5 +1,48 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: 'Times New Roman', Times, serif;
+    min-height: 100vh;
+}
+
 header{
     display: flex;
     flex-direction: row;
     gap: 30px;
+}
+
+header>h1{
+    color: red;
+}
+
+main{
+    display:flex ;
+    flex-direction: row;
+}
+
+.container{
+    background-color: rgb(0, 183, 255);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 15px;
+    box-sizing: border-box;
+    padding: 40px;
+    width: 100%;
+}
+
+.menu{
+    background-color: blueviolet;
+    width: 100%;
+}
+.conteudo{
+    background-color: rgb(250, 36, 36);
+    padding: 10px;
+    border: 1px solid #00000000;
+    border-radius: 15px;
+}
+
+.conteudo>iframe{
+    width: 400px;
+    height: 250px;
 }
