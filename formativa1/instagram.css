@@ -186,8 +186,46 @@ h1 {
   }
 }
 
-.like-count {
+.like-count,
+.comment-count {
   font-weight: 600;
+  font-size: 0.9rem;
+  margin-right: 8px;
+}
+
+.comments {
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #dddddd00;
+  border-radius: 10px;
+  background-color: #f9f9f900;
+}
+
+.comments input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.comments span {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.comment-list {
+  max-height: 120px;
+  overflow-y: auto;
+  margin-bottom: 8px;
+}
+
+.comment-item {
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 6px;
   font-size: 0.9rem;
 }
 
