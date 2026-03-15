@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Hand Tracking - MediaPipe JS</title>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  
+  <style>
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      text-align: center;
+      background: radial-gradient(circle at 20% 20%, rgba(0, 255, 255, 0.18), transparent 45%),
+                  radial-gradient(circle at 80% 30%, rgba(255, 0, 255, 0.12), transparent 40%),
+                  #070a10;
+      color: #e8f8ff;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: rgba(220, 255, 255, 0.92);
+    }
+
+    .container {
+      position: relative;
+      display: inline-block;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(0, 255, 255, 0.22);
+    }
+
+    #webcam {
+      transform: rotateY(180deg);
+      width: 640px;
+      height: 480px;
+      display: none;
+    }
+
+    #output_canvas {
+      transform: rotateY(180deg);
+      width: 640px;
+      height: 480px;
+      border: 1px solid rgba(0, 255, 255, 0.35);
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.14);
+      box-shadow: 0 0 35px rgba(0, 255, 255, 0.18);
+    }
+
+    #flash-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1000;
+      transition: opacity 0.1s ease;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Hand Tracking no Navegador</h1>
+  <div class="container">
+    <video id="webcam" autoplay playsinline></video>
+    <canvas id="output_canvas"></canvas>
+  </div>
+  <div id="flash-overlay"></div>
+  <button id="toggle-draw" style="margin-top: 12px; padding: 8px 16px; background: rgba(0,255,255,0.2); border: 1px solid rgba(0,255,255,0.5); color: #e8f8ff; border-radius: 8px; cursor: pointer;">Desenho: ON</button>
+  <button id="start-camera" style="margin-top: 12px; margin-left: 12px; padding: 8px 16px; background: rgba(255,0,255,0.2); border: 1px solid rgba(255,0,255,0.5); color: #e8f8ff; border-radius: 8px; cursor: pointer;">Iniciar Câmera</button>
+  <button id="toggle-detection" style="margin-top: 12px; margin-left: 12px; padding: 8px 16px; background: rgba(255,255,0,0.2); border: 1px solid rgba(255,255,0,0.5); color: #e8f8ff; border-radius: 8px; cursor: pointer;">Detecção: OFF</button>
+  <p style="margin-top:10px; font-size:0.9rem; color:#ccc;">
+    Indicador + médio: desenhar; Indicador + polegar: mover desenho; Mão fechada: apagar; Dedo médio esticado (outros retraídos): flash de luz (4s).
+  </p>
+
+  <script type="module">
+    const videoElement = document.getElementById('webcam');
+    const canvasElement = document.getElementById('output_canvas');
+    const canvasCtx = canvasElement.getContext('2d');
+    const toggleDrawBtn = document.getElementById('toggle-draw');
+    const startCameraBtn = document.getElementById('start-camera');
+    const toggleDetectionBtn = document.getElementById('toggle-detection');
+    let drawingEnabled = true;
+    let cameraStarted = false;
+    let objectDetectionEnabled = false;
+    let cocoSsdModel = null;
+
+    toggleDrawBtn.onclick = () => {
+      drawingEnabled = !drawingEnabled;
+      toggleDrawBtn.textContent = `Desenho: ${drawingEnabled ? 'ON' : 'OFF'}`;
+    };
+
+    toggleDetectionBtn.onclick = async () => {
+      objectDetectionEnabled = !objectDetectionEnabled;
+      toggleDetectionBtn.textContent = `Detecção: ${objectDetectionEnabled ? 'ON' : 'OFF'}`;
+      
+      if (objectDetectionEnabled && !cocoSsdModel) {
+        try {
+          toggleDetectionBtn.textContent = 'Carregando...';
+          cocoSsdModel = await cocoSsd.load();
+          toggleDetectionBtn.textContent = 'Detecção: ON';
+        } catch (error) {
+          console.error('Erro ao carregar modelo:', error);
+          alert('Erro ao carregar modelo de detecção de objetos');
+          objectDetectionEnabled = false;
+          toggleDetectionBtn.textContent = 'Detecção: OFF';
+        }
+      }
+    };
+
+    startCameraBtn.onclick = async () => {
+      if (cameraStarted) return;
+      try {
+        await window.mediaPipeCamera.start();
+        cameraStarted = true;
+        startCameraBtn.textContent = 'Câmera Iniciada';
+        startCameraBtn.disabled = true;
+      } catch (error) {
+        console.error('Erro ao iniciar câmera:', error);
+        alert('Erro ao acessar a câmera. Verifique as permissões e tente novamente.');
+      }
+    };
+
+    // Estado por mão
+    if (!window.handState) window.handState = [];
+
+    function ensureHandState(index) {
+      if (!window.handState[index]) {
+        window.handState[index] = {
+          drawingPoints: [],
+          isDrawing: false,
+          isMoving: false,
+          lastHandPos: null,
+          drawFrames: 0,
+          moveFrames: 0,
+          eraseFrames: 0,
+          flashFrames: 0,
+          flashTriggered: false
+        };
+      }
+      return window.handState[index];
+    }
+
+    function isIndexMiddleTouch(landmarks) {
+      const dx = (landmarks[8].x - landmarks[12].x) * canvasElement.width;
+      const dy = (landmarks[8].y - landmarks[12].y) * canvasElement.height;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      return distance < canvasElement.width * 0.03; // 3% da largura do canvas
+    }
+
+    function isIndexThumbTouch(landmarks) {
+      const dx = (landmarks[8].x - landmarks[4].x) * canvasElement.width;
+      const dy = (landmarks[8].y - landmarks[4].y) * canvasElement.height;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      return distance < canvasElement.width * 0.03;
+    }
+
+    function isHandClosed(landmarks) {
+      return (
+        landmarks[8].y > landmarks[5].y &&
+        landmarks[12].y > landmarks[9].y &&
+        landmarks[16].y > landmarks[13].y &&
+        landmarks[20].y > landmarks[17].y
+      );
+    }
+
+    function isMiddleFingerExtended(landmarks) {
+      // Dedo médio esticado (abaixo da junta)
+      const middleExtended = landmarks[12].y < landmarks[10].y;
+      // Outros dedos retraídos
+      const indexRetracted = landmarks[8].y > landmarks[6].y;
+      const ringRetracted = landmarks[16].y > landmarks[14].y;
+      const pinkyRetracted = landmarks[20].y > landmarks[18].y;
+      
+      return middleExtended && indexRetracted && ringRetracted && pinkyRetracted;
+    }
+
+    function triggerFlash() {
+      const overlay = document.getElementById('flash-overlay');
+      overlay.style.opacity = '1';
+      setTimeout(() => {
+        overlay.style.opacity = '0';
+      }, 4000); // 4 segundos
+    }
+
+    async function detectObjects(image) {
+      if (!cocoSsdModel || !objectDetectionEnabled) return [];
+      
+      try {
+        const predictions = await cocoSsdModel.detect(image);
+        return predictions.filter(pred => pred.score > 0.5); // Apenas objetos com confiança > 50%
+      } catch (error) {
+        console.error('Erro na detecção:', error);
+        return [];
+      }
+    }
+
+    function drawObjectDetections(ctx, predictions) {
+      const colors = [
+        '#00ff00', '#ff0000', '#0000ff', '#ffff00', '#ff00ff', '#00ffff',
+        '#ff8000', '#8000ff', '#00ff80', '#ff0080', '#80ff00', '#0080ff'
+      ];
+      
+      ctx.save();
+      // Aplicar a mesma transformação do vídeo para compensar o espelhamento
+      ctx.translate(canvasElement.width, 0);
+      ctx.scale(-1, 1);
+      
+      predictions.forEach((prediction, index) => {
+        const [x, y, width, height] = prediction.bbox;
+        const color = colors[index % colors.length];
+        
+        // Desenhar bounding box
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 3;
+        ctx.strokeRect(x, y, width, height);
+        
+        // Desenhar label com fundo
+        ctx.fillStyle = color;
+        ctx.font = 'bold 14px Arial';
+        const label = `${prediction.class} ${Math.round(prediction.score * 100)}%`;
+        const textWidth = ctx.measureText(label).width;
+        const textHeight = 16;
+        
+        // Fundo do label
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.fillRect(x, y - textHeight - 4, textWidth + 8, textHeight + 4);
+        
+        // Texto do label
+        ctx.fillStyle = color;
+        ctx.fillText(label, x + 4, y - 4);
+      });
+      
+      ctx.restore();
+    }
+
+    function onResults(results) {
+      const newWidth = videoElement.videoWidth;
+      const newHeight = videoElement.videoHeight;
+      
+      if (canvasElement.width !== newWidth || canvasElement.height !== newHeight) {
+        canvasElement.width = newWidth;
+        canvasElement.height = newHeight;
+      }
+
+      canvasCtx.save();
+      canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+      // Desenha o frame da câmera
+      canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+
+      // Detectar objetos se habilitado
+      if (objectDetectionEnabled && cocoSsdModel) {
+        detectObjects(results.image).then(predictions => {
+          drawObjectDetections(canvasCtx, predictions);
+        }).catch(error => {
+          console.error('Erro na detecção assíncrona:', error);
+        });
+      }
+
+      const handsLandmarks = results.multiHandLandmarks || [];
+      for (let i = 0; i < handsLandmarks.length; i++) {
+        const landmarks = handsLandmarks[i];
+        const state = ensureHandState(i);
+
+        if (typeof HAND_CONNECTIONS !== 'undefined') {
+          drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { color: 'rgba(0,255,255,0.6)', lineWidth: 2 });
+        }
+        drawLandmarks(canvasCtx, landmarks, { color: 'rgba(255,0,255,0.8)', lineWidth: 1, radius: 2 });
+
+        const touchingIndexMiddleRaw = isIndexMiddleTouch(landmarks);
+        const touchingIndexThumbRaw = isIndexThumbTouch(landmarks);
+        const closed = isHandClosed(landmarks);
+        const middleExtended = isMiddleFingerExtended(landmarks);
+
+        // Debounce para tornar o sensor mais estável
+        state.drawFrames = (touchingIndexMiddleRaw ? (state.drawFrames || 0) + 1 : 0);
+        state.moveFrames = (touchingIndexThumbRaw ? (state.moveFrames || 0) + 1 : 0);
+        state.eraseFrames = (closed ? (state.eraseFrames || 0) + 1 : 0);
+        state.flashFrames = (middleExtended ? (state.flashFrames || 0) + 1 : 0);
+
+        const touchingIndexMiddle = state.drawFrames >= 3;
+        const touchingIndexThumb = state.moveFrames >= 3;
+        const eraseGesture = state.eraseFrames >= 3;
+        const flashGesture = state.flashFrames >= 5; // Mais frames para flash por ser crítico
+
+        // --- Desenho (indicador + médio)
+        if (touchingIndexMiddle) {
+          const tip = landmarks[8];
+          const x = tip.x * canvasElement.width;
+          const y = tip.y * canvasElement.height;
+          if (!state.isDrawing) {
+            state.isDrawing = true;
+            state.drawingPoints.push(null);
+          }
+          state.drawingPoints.push({ x, y });
+        } else {
+          state.isDrawing = false;
+        }
+
+        // --- Movimento do desenho (indicador + polegar)
+        if (touchingIndexThumb && state.drawingPoints.length > 0) {
+          const tip = landmarks[8];
+          const x = tip.x * canvasElement.width;
+          const y = tip.y * canvasElement.height;
+
+          if (!state.isMoving) {
+            state.isMoving = true;
+            state.lastHandPos = { x, y };
+          } else {
+            const dx = x - state.lastHandPos.x;
+            const dy = y - state.lastHandPos.y;
+            // Move todas as coordenadas do traço
+            for (const pt of state.drawingPoints) {
+              if (!pt) continue;
+              pt.x += dx;
+              pt.y += dy;
+            }
+            state.lastHandPos = { x, y };
+          }
+        } else {
+          state.isMoving = false;
+          state.lastHandPos = null;
+        }
+
+        // --- Apagar desenho (mão fechada)
+        if (eraseGesture) {
+          state.drawingPoints = [];
+        }
+
+        // --- Flash de luz (dedo médio esticado, outros retraídos)
+        if (flashGesture && !state.flashTriggered) {
+          state.flashTriggered = true;
+          triggerFlash();
+        } else if (!flashGesture) {
+          state.flashTriggered = false;
+        }
+
+        if (state.drawingPoints.length > 5000) {
+          state.drawingPoints.splice(0, state.drawingPoints.length - 5000);
+        }
+
+        // Reset de debounce se o gesto cessa
+        if (!touchingIndexMiddleRaw) state.drawFrames = 0;
+        if (!touchingIndexThumbRaw) state.moveFrames = 0;
+        if (!closed) state.eraseFrames = 0;
+        if (!middleExtended) state.flashFrames = 0;
+      }
+
+      // Desenha o traço livre para cada mão
+      if (drawingEnabled) {
+        for (let i = 0; i < window.handState.length; i++) {
+          const state = window.handState[i];
+          if (!state || state.drawingPoints.length === 0) continue;
+
+          canvasCtx.save();
+          canvasCtx.shadowColor = '#00fff7';
+          canvasCtx.shadowBlur = 18;
+          canvasCtx.strokeStyle = i === 0 ? 'rgba(0,255,247,0.95)' : 'rgba(255,100,245,0.95)';
+          canvasCtx.lineWidth = 7;
+          canvasCtx.beginPath();
+
+          let started = false;
+          for (const pt of state.drawingPoints) {
+            if (!pt) {
+              started = false;
+              continue;
+            }
+            if (!started) {
+              canvasCtx.moveTo(pt.x, pt.y);
+              started = true;
+            } else {
+              canvasCtx.lineTo(pt.x, pt.y);
+            }
+          }
+
+          canvasCtx.stroke();
+          canvasCtx.restore();
+        }
+      }
+
+      canvasCtx.restore();
+    }
+
+    const hands = new Hands({
+      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+    });
+
+    // Função assíncrona para inicializar MediaPipe
+    async function initMediaPipe() {
+      await hands.initialize();
+
+      hands.setOptions({
+        maxNumHands: 2,
+        modelComplexity: 1,
+        minDetectionConfidence: 0.3,
+        minTrackingConfidence: 0.3
+      });
+
+      hands.onResults(onResults);
+
+      const camera = new Camera(videoElement, {
+        onFrame: async () => {
+          await hands.send({image: videoElement});
+        },
+        width: 640,
+        height: 480
+      });
+
+      // Tornar global para o botão acessar
+      window.mediaPipeCamera = camera;
+    }
+
+    initMediaPipe();
+  </script>
+</body>
+</html>
