@@ -1,253 +1,232 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="youtube.css" />
-  </head>
-  <body>
-    <header>
-      <h1>YouTube</h1>
-      <input type="text" />
-    </header>
-    <main>
-      <div class="menu">
-        <ul>
-          <a href="">Menu</a
-          ><br />
-          <a href="">Inscrições</a
-          ><br />
-          <a href="">PlayList</a
-          ><br />
-          <a href="">Historico</a>
-        </ul>
-      </div>
-      <div class="container">
-        <div class="conteudo">
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/cLrqigA6AbE?si=Q0ri_C2Ip5jPUkHO"
-            title="YouTube video player"
-            frameborder="0"
-            allow="
-              accelerometer;
-              autoplay;
-              clipboard-write;
-              encrypted-media;
-              gyroscope;
-              picture-in-picture;
-              web-share;
-            "
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
-          ></iframe>
-          <h2>Blxck, Hyei - CHAOSPARTY (EP Completo)</h2>
-          <p>Blxck</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube</title>
+    <!-- Google Fonts: Roboto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Google Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="youtube.css">
+</head>
+<body>
 
-          <p>1.1 Mi de Visualizações - há 1 mês</p>
+    <nav class="navbar">
+        <div class="nav-left">
+            <button class="icon-btn"><span class="material-symbols-outlined">menu</span></button>
+            <div class="logo">
+                <span class="material-symbols-outlined logo-icon">play_circle</span>
+                <span class="logo-text">YouTube</span>
+            </div>
         </div>
 
-        <div class="conteudo">
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/cLrqigA6AbE?si=Q0ri_C2Ip5jPUkHO"
-            title="YouTube video player"
-            frameborder="0"
-            allow="
-              accelerometer;
-              autoplay;
-              clipboard-write;
-              encrypted-media;
-              gyroscope;
-              picture-in-picture;
-              web-share;
-            "
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
-          ></iframe>
-          <h2>Blxck, Hyei - CHAOSPARTY (EP Completo)</h2>
-          <p>Blxck</p>
-
-          <p>1.1 Mi de Visualizações - há 1 mês</p>
+        <div class="nav-center">
+            <div class="search-box">
+                <input type="text" placeholder="Pesquisar">
+                <button class="search-btn"><span class="material-symbols-outlined">search</span></button>
+            </div>
+            <button class="mic-btn icon-btn"><span class="material-symbols-outlined">mic</span></button>
         </div>
 
-        <div class="conteudo">
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/cLrqigA6AbE?si=Q0ri_C2Ip5jPUkHO"
-            title="YouTube video player"
-            frameborder="0"
-            allow="
-              accelerometer;
-              autoplay;
-              clipboard-write;
-              encrypted-media;
-              gyroscope;
-              picture-in-picture;
-              web-share;
-            "
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
-          ></iframe>
-          <h2>Blxck, Hyei - CHAOSPARTY (EP Completo)</h2>
-          <p>Blxck</p>
-
-          <p>1.1 Mi de Visualizações - há 1 mês</p>
+        <div class="nav-right">
+            <button class="icon-btn"><span class="material-symbols-outlined">video_call</span></button>
+            <button class="icon-btn"><span class="material-symbols-outlined">notifications</span></button>
+            <img src="https://i.pravatar.cc/150?img=11" alt="Avatar" class="avatar-header">
         </div>
+    </nav>
 
-        <div class="conteudo">
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/cLrqigA6AbE?si=Q0ri_C2Ip5jPUkHO"
-            title="YouTube video player"
-            frameborder="0"
-            allow="
-              accelerometer;
-              autoplay;
-              clipboard-write;
-              encrypted-media;
-              gyroscope;
-              picture-in-picture;
-              web-share;
-            "
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
-          ></iframe>
-          <h2>Blxck, Hyei - CHAOSPARTY (EP Completo)</h2>
-          <p>Blxck</p>
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="sidebar-item active">
+                <span class="material-symbols-outlined">home</span>
+                <span>Início</span>
+            </div>
+            <div class="sidebar-item">
+                <span class="material-symbols-outlined">app_shortcut</span>
+                <span>Shorts</span>
+            </div>
+            <div class="sidebar-item">
+                <span class="material-symbols-outlined">subscriptions</span>
+                <span>Inscrições</span>
+            </div>
+            <hr class="divider">
+            <div class="sidebar-item">
+                <span class="material-symbols-outlined">history</span>
+                <span>Histórico</span>
+            </div>
+            <div class="sidebar-item">
+                <span class="material-symbols-outlined">playlist_play</span>
+                <span>Playlists</span>
+            </div>
+            <div class="sidebar-item">
+                <span class="material-symbols-outlined">schedule</span>
+                <span>Assistir mais tarde</span>
+            </div>
+            <div class="sidebar-item">
+                <span class="material-symbols-outlined">thumb_up</span>
+                <span>Vídeos que gostei</span>
+            </div>
+            <hr class="divider">
+            <div class="sidebar-section-title">Inscrições</div>
+            <div class="sidebar-item">
+                <img class="sidebar-avatar" src="https://i.pravatar.cc/150?img=8" alt="">
+                <span>Blxck</span>
+            </div>
+            <div class="sidebar-item">
+                <img class="sidebar-avatar" src="https://i.pravatar.cc/150?img=12" alt="">
+                <span>Canal de Jogos</span>
+            </div>
+            <div class="sidebar-item">
+                <img class="sidebar-avatar" src="https://i.pravatar.cc/150?img=3" alt="">
+                <span>Programação</span>
+            </div>
+        </aside>
 
-          <p>1.1 Mi de Visualizações - há 1 mês</p>
-        </div>
+        <main class="content">
+            <div class="categories">
+                <button class="category-btn active">Tudo</button>
+                <button class="category-btn">Música</button>
+                <button class="category-btn">Jogos</button>
+                <button class="category-btn">Ao vivo</button>
+                <button class="category-btn">Mixes</button>
+                <button class="category-btn">Podcasts</button>
+                <button class="category-btn">Programação</button>
+                <button class="category-btn">Notícias</button>
+            </div>
+            
+            <div class="video-grid">
+                <!-- Video Card 1 -->
+                <div class="video-card">
+                    <div class="thumbnail-container">
+                        <img src="https://i.ytimg.com/vi/cLrqigA6AbE/hq720.jpg" alt="Thumbnail" class="thumbnail">
+                        <span class="time-badge">24:12</span>
+                    </div>
+                    <div class="video-info">
+                        <img src="https://i.pravatar.cc/150?img=8" alt="Channel Avatar" class="channel-avatar">
+                        <div class="video-details">
+                            <h3 class="video-title">Blxck, Hyei - CHAOSPARTY (EP Completo)</h3>
+                            <p class="channel-name">Blxck</p>
+                            <p class="video-stats">1,1 Mi de visualizações &bull; há 1 mês</p>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="conteudo">
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/cLrqigA6AbE?si=Q0ri_C2Ip5jPUkHO"
-            title="YouTube video player"
-            frameborder="0"
-            allow="
-              accelerometer;
-              autoplay;
-              clipboard-write;
-              encrypted-media;
-              gyroscope;
-              picture-in-picture;
-              web-share;
-            "
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
-          ></iframe>
-          <h2>Blxck, Hyei - CHAOSPARTY (EP Completo)</h2>
-          <p>Blxck</p>
+                <!-- Video Card 2 -->
+                <div class="video-card">
+                    <div class="thumbnail-container">
+                        <img src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Thumbnail" class="thumbnail">
+                        <span class="time-badge">10:05</span>
+                    </div>
+                    <div class="video-info">
+                        <img src="https://i.pravatar.cc/150?img=1" alt="Channel Avatar" class="channel-avatar">
+                        <div class="video-details">
+                            <h3 class="video-title">Iniciando na Fotografia: Dicas Essenciais para Iniciantes</h3>
+                            <p class="channel-name">Foto Pro</p>
+                            <p class="video-stats">500 mil visualizações &bull; há 2 semanas</p>
+                        </div>
+                    </div>
+                </div>
 
-          <p>1.1 Mi de Visualizações - há 1 mês</p>
-        </div>
+                <!-- Video Card 3 -->
+                <div class="video-card">
+                    <div class="thumbnail-container">
+                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Thumbnail" class="thumbnail">
+                        <span class="time-badge">1:12:45</span>
+                    </div>
+                    <div class="video-info">
+                        <img src="https://i.pravatar.cc/150?img=2" alt="Channel Avatar" class="channel-avatar">
+                        <div class="video-details">
+                            <h3 class="video-title">Curso Completo de Desenvolvimento Web 2024</h3>
+                            <p class="channel-name">Dev Master</p>
+                            <p class="video-stats">2,3 Mi de visualizações &bull; há 5 meses</p>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="conteudo">
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/cLrqigA6AbE?si=Q0ri_C2Ip5jPUkHO"
-            title="YouTube video player"
-            frameborder="0"
-            allow="
-              accelerometer;
-              autoplay;
-              clipboard-write;
-              encrypted-media;
-              gyroscope;
-              picture-in-picture;
-              web-share;
-            "
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
-          ></iframe>
-          <h2>Blxck, Hyei - CHAOSPARTY (EP Completo)</h2>
-          <p>Blxck</p>
+                <!-- Video Card 4 -->
+                <div class="video-card">
+                    <div class="thumbnail-container">
+                        <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Thumbnail" class="thumbnail">
+                        <span class="time-badge">8:20</span>
+                    </div>
+                    <div class="video-info">
+                        <img src="https://i.pravatar.cc/150?img=3" alt="Channel Avatar" class="channel-avatar">
+                        <div class="video-details">
+                            <h3 class="video-title">Design UI/UX - Tendências que você precisa saber</h3>
+                            <p class="channel-name">Design UI/UX</p>
+                            <p class="video-stats">150 mil visualizações &bull; há 3 dias</p>
+                        </div>
+                    </div>
+                </div>
 
-          <p>1.1 Mi de Visualizações - há 1 mês</p>
-        </div>
+                <!-- Video Card 5 -->
+                <div class="video-card">
+                    <div class="thumbnail-container">
+                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Thumbnail" class="thumbnail">
+                        <span class="time-badge">15:30</span>
+                    </div>
+                    <div class="video-info">
+                        <img src="https://i.pravatar.cc/150?img=4" alt="Channel Avatar" class="channel-avatar">
+                        <div class="video-details">
+                            <h3 class="video-title">Review Setup Gamer 2024 - O que mudou?</h3>
+                            <p class="channel-name">Tech Review</p>
+                            <p class="video-stats">850 mil visualizações &bull; há 1 mês</p>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="conteudo">
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/cLrqigA6AbE?si=Q0ri_C2Ip5jPUkHO"
-            title="YouTube video player"
-            frameborder="0"
-            allow="
-              accelerometer;
-              autoplay;
-              clipboard-write;
-              encrypted-media;
-              gyroscope;
-              picture-in-picture;
-              web-share;
-            "
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
-          ></iframe>
-          <h2>Blxck, Hyei - CHAOSPARTY (EP Completo)</h2>
-          <p>Blxck</p>
+                <!-- Video Card 6 -->
+                <div class="video-card">
+                    <div class="thumbnail-container">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Thumbnail" class="thumbnail">
+                        <span class="time-badge">3:45:00</span>
+                    </div>
+                    <div class="video-info">
+                        <img src="https://i.pravatar.cc/150?img=5" alt="Channel Avatar" class="channel-avatar">
+                        <div class="video-details">
+                            <h3 class="video-title">Lofi Hip Hop Radio - Beats to Relax/Study to</h3>
+                            <p class="channel-name">Lofi Vibes</p>
+                            <p class="video-stats">10 Mi de visualizações &bull; Transmitido há 2 anos</p>
+                        </div>
+                    </div>
+                </div>
 
-          <p>1.1 Mi de Visualizações - há 1 mês</p>
-        </div>
+                <!-- Video Card 7 -->
+                <div class="video-card">
+                    <div class="thumbnail-container">
+                        <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Thumbnail" class="thumbnail">
+                        <span class="time-badge">12:15</span>
+                    </div>
+                    <div class="video-info">
+                        <img src="https://i.pravatar.cc/150?img=6" alt="Channel Avatar" class="channel-avatar">
+                        <div class="video-details">
+                            <h3 class="video-title">Top 10 Filmes de Ficção Científica</h3>
+                            <p class="channel-name">Cine Club</p>
+                            <p class="video-stats">200 mil visualizações &bull; há 5 dias</p>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="conteudo">
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/cLrqigA6AbE?si=Q0ri_C2Ip5jPUkHO"
-            title="YouTube video player"
-            frameborder="0"
-            allow="
-              accelerometer;
-              autoplay;
-              clipboard-write;
-              encrypted-media;
-              gyroscope;
-              picture-in-picture;
-              web-share;
-            "
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
-          ></iframe>
-          <h2>Blxck, Hyei - CHAOSPARTY (EP Completo)</h2>
-          <p>Blxck</p>
-
-          <p>1.1 Mi de Visualizações - há 1 mês</p>
-        </div>
-        <div class="conteudo">
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/cLrqigA6AbE?si=Q0ri_C2Ip5jPUkHO"
-            title="YouTube video player"
-            frameborder="0"
-            allow="
-              accelerometer;
-              autoplay;
-              clipboard-write;
-              encrypted-media;
-              gyroscope;
-              picture-in-picture;
-              web-share;
-            "
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
-          ></iframe>
-          <h2>Blxck, Hyei - CHAOSPARTY (EP Completo)</h2>
-          <p>Blxck</p>
-
-          <p>1.1 Mi de Visualizações - há 1 mês</p>
-        </div>
-      </div>
-    </main>
-    <footer></footer>
-  </body>
+                <!-- Video Card 8 -->
+                <div class="video-card">
+                    <div class="thumbnail-container">
+                        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Thumbnail" class="thumbnail">
+                        <span class="time-badge">18:40</span>
+                    </div>
+                    <div class="video-info">
+                        <img src="https://i.pravatar.cc/150?img=7" alt="Channel Avatar" class="channel-avatar">
+                        <div class="video-details">
+                            <h3 class="video-title">Construindo um PC Gamer do Zero (Passo a Passo)</h3>
+                            <p class="channel-name">Hardware BR</p>
+                            <p class="video-stats">1,5 Mi de visualizações &bull; há 8 meses</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
 </html>

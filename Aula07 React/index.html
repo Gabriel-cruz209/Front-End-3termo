@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Interativo: React & Vite</title>
+    <style>
+        :root {
+            --react-blue: #61dafb;
+            --vite-purple: #646cff;
+            --bg-dark: #20232a;
+            --card-bg: #282c34;
+            --text-light: #ebebeb;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #1a1a1a;
+            width: 100%;
+            padding: 2rem 0;
+            text-align: center;
+            border-bottom: 2px solid var(--react-blue);
+        }
+
+        .container {
+            max-width: 900px;
+            width: 90%;
+            margin: 20px auto;
+        }
+
+        /* Navegação */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            background: var(--card-bg);
+            border: 2px solid transparent;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            border-color: var(--react-blue);
+            background: #333842;
+        }
+
+        /* Conteúdo */
+        .content-section {
+            display: none;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 { color: var(--react-blue); border-bottom: 1px solid #444; padding-bottom: 10px; }
+        h3 { color: var(--vite-purple); }
+
+        .highlight-box {
+            background: rgba(97, 218, 251, 0.1);
+            border-left: 4px solid var(--react-blue);
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        code {
+            background: #1e1e1e;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #dcdcaa;
+        }
+
+        pre {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid #444;
+        }
+
+        .lego-demo {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .lego-piece {
+            width: 60px;
+            height: 30px;
+            background: var(--react-blue);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .btn-action {
+            background: var(--vite-purple);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-action:hover { opacity: 0.8; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Introdução ao React & Vite</h1>
+    <p>Aprenda os conceitos fundamentais de forma interativa</p>
+</header>
+
+<div class="container">
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="showTab('react-base')">1. O que é React?</button>
+        <button class="tab-btn" onclick="showTab('pilares')">2. Pilares</button>
+        <button class="tab-btn" onclick="showTab('dados')">3. Props & State</button>
+        <button class="tab-btn" onclick="showTab('vite')">4. O que é Vite?</button>
+        <button class="tab-btn" onclick="showTab('pratica')">5. Na Prática</button>
+    </div>
+
+    <section id="react-base" class="content-section active">
+        <h2>O que é o React?</h2>
+        <p>É uma biblioteca JavaScript de código aberto focada na construção de <strong>interfaces de usuário (UI)</strong>.</p>
+        <div class="highlight-box">
+            <strong>Diferencial:</strong> Em vez de ditar toda a estrutura, o React foca na visualização, permitindo criar partes isoladas (Componentes) e combiná-las.
+        </div>
+        <p>Criado pelo Facebook, ele introduziu a mentalidade de <em>Componentização</em> no desenvolvimento web moderno.</p>
+    </section>
+
+    <section id="pilares" class="content-section">
+        <h2>Pilares Fundamentais</h2>
+        
+        <h3>A. Componentização</h3>
+        <p>Pense como peças de LEGO:</p>
+        <div class="lego-demo">
+            <div class="lego-piece">Botão</div>
+            <div class="lego-piece">Input</div>
+            <div class="lego-piece">Card</div>
+        </div>
+        <ul>
+            <li><strong>Reutilização:</strong> Use o mesmo componente em vários lugares.</li>
+            <li><strong>Manutenção:</strong> Altere em um lugar, atualize em todos.</li>
+        </ul>
+
+        <h3>B. JSX (JavaScript XML)</h3>
+        <p>Escreva HTML dentro do JavaScript de forma intuitiva:</p>
+        <pre><code>const elemento = &lt;h1&gt;Olá Mundo!&lt;/h1&gt;;</code></pre>
+
+        <h3>C. Virtual DOM</h3>
+        <p>O React cria uma cópia leve do site na memória. Ele compara as mudanças e atualiza <strong>apenas</strong> o que é necessário no navegador real. Performance máxima!</p>
+    </section>
+
+    <section id="dados" class="content-section">
+        <h2>Gerenciamento de Dados</h2>
+        <div class="highlight-box">
+            <strong>Props (Properties):</strong> Dados que vêm de fora (pai para filho). São somente leitura.
+        </div>
+        <div class="highlight-box">
+            <strong>State (Estado):</strong> A memória interna. Quando o estado muda, o componente se atualiza sozinho!
+        </div>
+
+        <h3>Exemplo de Hook (useState):</h3>
+        <p>Clique abaixo para ver o estado mudando:</p>
+        <button class="btn-action" onclick="updateCounter()">Contador: <span id="count">0</span></button>
+        <p><small>(Isso simula o comportamento do React no DOM real)</small></p>
+    </section>
+
+    <section id="vite" class="content-section">
+        <h2>O que é o Vite? ⚡</h2>
+        <p>Vite significa "Rápido" em francês. É a ferramenta que prepara seu ambiente de desenvolvimento.</p>
+        <ul>
+            <li><strong>Velocidade:</strong> Inicia o projeto instantaneamente usando Native ESM.</li>
+            <li><strong>HMR:</strong> Atualiza apenas o que você mudou no código sem recarregar a página toda.</li>
+            <li><strong>Produção:</strong> Deixa seu site leve e otimizado para os usuários.</li>
+        </ul>
+    </section>
+
+    <section id="pratica" class="content-section">
+        <h2>Mão na Massa</h2>
+        <h3>1. Instalação</h3>
+        <p>Instale o <strong>Node.js (LTS)</strong> e verifique no terminal:</p>
+        <pre><code>node -v
+npm -v</code></pre>
+
+        <h3>2. Estrutura de Pastas</h3>
+        <ul>
+            <li><code>node_modules/</code>: Bibliotecas (Não mexer).</li>
+            <li><code>src/main.jsx</code>: Onde tudo começa.</li>
+            <li><code>src/App.jsx</code>: Seu componente principal.</li>
+        </ul>
+
+        <h3>3. Executando</h3>
+        <pre><code>npm run dev</code></pre>
+        <p>Abra o link do localhost e edite o <code>App.jsx</code> para ver a mágica acontecer!</p>
+    </section>
+</div>
+
+<script>
+    // Lógica das Abas
+    function showTab(tabId) {
+        // Esconder todas as seções
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.classList.remove('active');
+        });
+        
+        // Remover classe ativa dos botões
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // Mostrar a seção clicada
+        document.getElementById(tabId).classList.add('active');
+        
+        // Ativar o botão clicado
+        event.currentTarget.classList.add('active');
+    }
+
+    // Simulação simples de estado (State)
+    let count = 0;
+    function updateCounter() {
+        count++;
+        document.getElementById('count').innerText = count;
+    }
+</script>
+
+</body>
+</html>
